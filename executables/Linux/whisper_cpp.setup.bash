@@ -73,6 +73,8 @@ echo "    debug [-d]: $debug"
 echo "Step 0/3 - Check Required apt instalations"
 echo "    libarchive-tools"
 apt install libarchive-tools -y &>/dev/nul
+echo "    libsdl2-dev"
+apt-get install libsdl2-dev -y &>/dev/nul
 
 # Move to Project Folder
 if ( test -d "$MODEL_PATH" ); 

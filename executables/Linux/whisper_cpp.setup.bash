@@ -16,7 +16,7 @@ MODEL_RELEASE=https://github.com/franciscomvargas/whisper.cpp/archive/refs/tags/
 #   $PWD = \home\[username]\Desota\Desota_Models\DeUrlCruncher\executables\Linux
 MODEL_PATH=$USER_HOME/Desota/Desota_Models/$MODEL_NAME
 # - Pre-Trained Model CMD
-MODEL_PT_DOWNLD=$MODEL_PATH/models/download-ggml-model.sh base.en
+MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh base.en"
 
 
 

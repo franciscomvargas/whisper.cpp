@@ -6,7 +6,7 @@ USER=${get_user%% *}
 USER_HOME="/home/$USER"
 
 
-# -- Edit bellow vvvv DeSOTA DEVELOPER EXAMPLe (Python - Tool): miniconda + pip pckgs + python cli script
+# -- Edit bellow vvvv DeSOTA DEVELOPER EXAMPLe (C++ - Tool): Everything rely on Make file
 
 # SETUP VARS
 MODEL_NAME=WhisperCpp
@@ -16,12 +16,11 @@ MODEL_RELEASE=https://github.com/franciscomvargas/whisper.cpp/archive/refs/tags/
 #   $PWD = \home\[username]\Desota\Desota_Models\DeUrlCruncher\executables\Linux
 MODEL_PATH=$USER_HOME/Desota/Desota_Models/$MODEL_NAME
 # - Pre-Trained Model CMD
-MODEL_PT_DOWNLD=bash $MODEL_PATH/models/download-ggml-model.sh base.en
+MODEL_PT_DOWNLD=$MODEL_PATH/models/download-ggml-model.sh base.en
 
 
-# -- Edit bellow if you're felling lucky ;) -- https://youtu.be/5NV6Rdv1a3I
 
-# SUPER USER RIGHTS
+# SUPER USER DO > Required for DeRunner 
 [ "$UID" -eq 0 ] || { 
     echo "Please consider running this script with root acess!"; 
     echo "Usage:"; 
@@ -92,7 +91,7 @@ fi
 
 echo
 echo "Step 1/3 - Download Pre-Trained Model"
-$MODEL_PT_DOWNLD
+bash $MODEL_PT_DOWNLD
 
 echo
 echo "Step 2/3 - Compile Project & Build main"

@@ -13,7 +13,7 @@ MODEL_NAME=WhisperCpp
 # - Model Release
 MODEL_RELEASE=https://github.com/franciscomvargas/whisper.cpp/archive/refs/tags/v0.0.0.zip
 # - Model Path
-#   $PWD = \home\[username]\Desota\Desota_Models\DeUrlCruncher\executables\Linux
+#   $PWD = /home/[username]/Desota/Desota_Models/WhisperCpp/executables/Linux
 MODEL_PATH=$USER_HOME/Desota/Desota_Models/$MODEL_NAME
 # - Pre-Trained Model CMD
 MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh base.en"
@@ -70,14 +70,31 @@ echo "    debug [-d]: $debug"
 
 # >>Libraries required<<
 echo "Step 0/3 - Check Required apt instalations"
-echo "    libarchive-tools"
-apt install libarchive-tools -y &>/dev/nul
-echo "    libsdl2-dev"
-apt-get install libsdl2-dev -y &>/dev/nul
-echo "    make"
-apt-get install make -y &>/dev/nul
-echo "    g++"
-apt-get install g++ -y &>/dev/nul
+if [ "$debug" -eq "1" ]; 
+then
+    echo "    libarchive-tools"
+    apt install libarchive-tools
+    echo "    libsdl2-dev"
+    apt-get install libsdl2-dev
+    echo "    make"
+    apt-get install make
+    echo "    g++"
+    apt-get install g++
+    echo "    ffmpeg"
+    apt install ffmpeg
+else
+    echo "    libarchive-tools"
+    apt install libarchive-tools -y &>/dev/nul
+    echo "    libsdl2-dev"
+    apt-get install libsdl2-dev -y &>/dev/nul
+    echo "    make"
+    apt-get install make -y &>/dev/nul
+    echo "    g++"
+    apt-get install g++ -y &>/dev/nul
+    echo "    ffmpeg"
+    apt install ffmpeg -y &>/dev/nul
+fi
+
 
 # Move to Project Folder
 if ( test -d "$MODEL_PATH" ); 
@@ -93,19 +110,39 @@ else
     exit
 fi
 
-echo
-echo "Step 1/3 - Download Pre-Trained Model"
-bash $MODEL_PT_DOWNLD
 
-echo
-echo "Step 2/3 - Compile Project & Build main"
-cd $MODEL_PATH
-make
+if [ "$debug" -eq "1" ]; 
+then    # DEBUG SETUP
+    echo
+    echo "Step 1/3 - Download Pre-Trained Model"
+    bash $MODEL_PT_DOWNLD
 
-echo
-echo "Step 3/3 - Build stream tool"
-cd $MODEL_PATH
-make stream
+    echo
+    echo "Step 2/3 - Compile Project & Build main"
+    cd $MODEL_PATH
+    make
+
+    echo
+    echo "Step 3/3 - Build stream tool"
+    cd $MODEL_PATH
+    make stream
+else    # QUIET SETUP
+    echo
+    echo "Step 1/3 - Download Pre-Trained Model"
+    bash $MODEL_PT_DOWNLD &>/dev/nul
+
+    echo
+    echo "Step 2/3 - Compile Project & Build main"
+    cd $MODEL_PATH 
+    make &>/dev/nul
+
+    echo
+    echo "Step 3/3 - Build stream tool"
+    cd $MODEL_PATH
+    make stream &>/dev/nul
+fi
+
+
 
 
 echo

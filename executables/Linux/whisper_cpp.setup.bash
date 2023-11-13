@@ -22,7 +22,7 @@ MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh base.en"
 
 # SUPER USER DO > Required for DeRunner 
 [ "$UID" -eq 0 ] || { 
-    echo "Please consider running this script with root acess!"; 
+    echo "Please consider running this script with root access, to apt instalations!"; 
     echo "Usage:"; 
     echo "sudo $0 [-m] [-q] [-h]";
     while true; do
@@ -74,6 +74,10 @@ echo "    libarchive-tools"
 apt install libarchive-tools -y &>/dev/nul
 echo "    libsdl2-dev"
 apt-get install libsdl2-dev -y &>/dev/nul
+echo "    make"
+apt-get install make -y &>/dev/nul
+echo "    g++"
+apt-get install g++ -y &>/dev/nul
 
 # Move to Project Folder
 if ( test -d "$MODEL_PATH" ); 
@@ -112,4 +116,5 @@ if [ "$manualstart" -eq "0" ];
 then
     $MODEL_PATH/stream -m $MODEL_PATH/models/ggml-base.en.bin -t 8 --step 500 --length 5000
 fi
+chown -R $USER $MODEL_PATH
 exit

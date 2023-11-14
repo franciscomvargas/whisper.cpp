@@ -151,7 +151,7 @@ echo 'Setup Completed!'
 # Start Model ?
 if [ "$manualstart" -eq "0" ]; 
 then
-    $MODEL_PATH/stream -m $MODEL_PATH/models/ggml-base.en.bin -t 8 --step 500 --length 5000
+    $MODEL_PATH/stream -m $MODEL_PATH/models/ggml-base.en.bin --step 30000 --length 30000
 fi
 chown -R $USER $MODEL_PATH
 exit

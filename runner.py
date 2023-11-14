@@ -1,11 +1,7 @@
-import os
-import time
-import requests
+import os, sys, subprocess
+import time, requests, json
 import yaml
 from yaml.loader import SafeLoader
-import json
-import subprocess
-import time
 from runner_utils.utils import *
 
 import argparse
@@ -120,18 +116,24 @@ def main(args):
             exit(2)
         user_chown(_tmp_16b_conversion)
         # Run Model
-        _main_path = os.path.join(APP_PATH, main)
-        _sproc = subprocess.Popen([ 
-            _main_path, 
+        _main_path = os.path.join(APP_PATH, "main")
+        _model_path = os.path.join(APP_PATH, "models", "ggml-base.en.bin")
+        whisper_cmd = [ 
+            _main_path,
+            "-m", _model_path,
             "-f",  _tmp_16b_conversion, 
-            "--output-txt", "--output-file", out_filepath]
-        )
+            "--output-txt", "--output-file", out_filepath
+        ]
+        print("WHISPER CMD:")
+        print(" ".join(whisper_cmd))
+        _sproc = subprocess.Popen(whisper_cmd)
         # TODO: implement model timeout
         while True:
             _ret_code = _sproc.poll()
             if _ret_code != None:
                 break
         out_filepath += ".txt"
+        print(out_filepath)
         user_chown(out_filepath)
     else:
         print(f"[ ERROR ] -> Whisper Request Failed: No Input found")

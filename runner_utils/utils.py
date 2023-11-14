@@ -1,8 +1,6 @@
 import os
-import time
-import requests
-import re
-import shutil
+import time, requests
+import re, shutil
 
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 API_UP = "https://desota.net/assistant/api_uploads"
@@ -208,8 +206,8 @@ def get_request_text(model_request_dict):
 #   > AUDIO
 def get_request_audio(model_request_dict, dist_dir):
     audio_file = None
-    if 'audio' in model_request_dict["input_args"]:
-        fix_filename = fix_file_name(model_request_dict["input_args"]["audio"])
+    if 'audio' in model_request_dict["input_args"] and "file_name" in model_request_dict["input_args"]["audio"]:
+        fix_filename = fix_file_name(model_request_dict["input_args"]["audio"]["file_name"])
         audio_file = download_file(fix_filename, dist_dir)
     elif 'file' in model_request_dict["input_args"] and "file_name" in model_request_dict["input_args"]["file"]:
         fix_filename = fix_file_name(model_request_dict["input_args"]["file"]["file_name"])

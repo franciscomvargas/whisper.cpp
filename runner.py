@@ -102,7 +102,7 @@ def main(args):
     send_task_url = args.model_res_url
     
     # TMP File Path
-    out_filepath = os.path.join(APP_PATH, f"speech-recognition{start_time}.txt")
+    out_filepath = os.path.join(APP_PATH, f"speech-recognition{start_time}")
     
     # Get audio from request
     _req_audio = get_request_audio(model_request_dict, TMP_PATH)
@@ -121,17 +121,17 @@ def main(args):
         user_chown(_tmp_16b_conversion)
         # Run Model
         _main_path = os.path.join(APP_PATH, main)
-        with open(out_filepath, "w") as out_pipeline:
-            _sproc = subprocess.Popen(
-                [ _main_path, "-f",  _tmp_16b_conversion ],
-                stdout = out_pipeline,
-                stderr = out_pipeline
-            )
-            # TODO: implement model timeout
-            while True:
-                _ret_code = _sproc.poll()
-                if _ret_code != None:
-                    break
+        _sproc = subprocess.Popen([ 
+            _main_path, 
+            "-f",  _tmp_16b_conversion, 
+            "--output-txt", "--output-file", out_filepath]
+        )
+        # TODO: implement model timeout
+        while True:
+            _ret_code = _sproc.poll()
+            if _ret_code != None:
+                break
+        out_filepath += ".txt"
         user_chown(out_filepath)
     else:
         print(f"[ ERROR ] -> Whisper Request Failed: No Input found")

@@ -145,6 +145,9 @@ def main(args):
     
     with open(out_filepath, "r") as fr:
         model_res = fr.read()
+    with open(out_filepath, "w") as fw:
+        model_res = model_res.replace("\n", "<br>").replace("\t", "  ")
+        fw.write(model_res)
 
     print(f"[ INFO ] -> Whisper Response:{model_res}")
     

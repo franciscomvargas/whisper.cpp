@@ -16,7 +16,10 @@ MODEL_RELEASE=https://github.com/franciscomvargas/whisper.cpp/archive/refs/tags/
 #   $PWD = /home/[username]/Desota/Desota_Models/WhisperCpp/executables/Linux
 MODEL_PATH=$USER_HOME/Desota/Desota_Models/$MODEL_NAME
 # - Pre-Trained Model CMD
-MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh base.en"
+PRE_MODEL_ID=base.en
+PRE_MODEL_FILE=ggml-$PRE_MODEL_ID.bin
+PRE_MODEL_QUANTIZE=ggml-$PRE_MODEL_ID-q5_0.bin
+MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh $MODEL_NAME"
 
 
 
@@ -69,7 +72,7 @@ echo "    manualstart [-m]: $manualstart"
 echo "    debug [-d]: $debug"
 
 # >>Libraries required<<
-echo "Step 0/3 - Check Required apt instalations"
+echo "Step 0/4 - Check Required apt instalations"
 if [ "$debug" -eq "1" ]; 
 then
     echo "    libarchive-tools"
@@ -114,30 +117,48 @@ fi
 if [ "$debug" -eq "1" ]; 
 then    # DEBUG SETUP
     echo
-    echo "Step 1/3 - Download Pre-Trained Model"
+    echo "Step 1/4 - Download Pre-Trained Model"
+    echo "  ID: $MODEL_ID"
     bash $MODEL_PT_DOWNLD
 
     echo
-    echo "Step 2/3 - Compile Project & Build main"
+    echo "Step 2/4 - Compile Project & Build main"
+    echo "  Project: $MODEL_PATH"
     cd $MODEL_PATH
     make
 
     echo
-    echo "Step 3/3 - Build stream tool"
+    echo "Step 3/4 - Build quantize tool"
+    cd $MODEL_PATH
+    make quantize
+    echo "  Quantize model: $PRE_MODEL_QUANTIZE"
+    $MODEL_PATH/quantize $MODEL_PATH/models/$PRE_MODEL_FILE $MODEL_PATH/models/$PRE_MODEL_QUANTIZE q5_0
+
+    echo
+    echo "Step 4/4 - Build stream tool"
     cd $MODEL_PATH
     make stream
 else    # QUIET SETUP
     echo
-    echo "Step 1/3 - Download Pre-Trained Model"
+    echo "Step 1/4 - Download Pre-Trained Model"
+    echo "  ID: $PRE_MODEL_ID"
     bash $MODEL_PT_DOWNLD &>/dev/nul
 
     echo
-    echo "Step 2/3 - Compile Project & Build main"
+    echo "Step 2/4 - Compile Project & Build main"
+    echo "  Project: $MODEL_PATH"
     cd $MODEL_PATH 
     make &>/dev/nul
 
     echo
-    echo "Step 3/3 - Build stream tool"
+    echo "Step 3/4 - Build quantize tool"
+    cd $MODEL_PATH
+    make quantize &>/dev/nul
+    echo "  Quantize model: $PRE_MODEL_QUANTIZE"
+    $MODEL_PATH/quantize $MODEL_PATH/models/ggml-base.en.bin $MODEL_PATH/models/$PRE_MODEL_QUANTIZE q5_0 &>/dev/nul
+
+    echo
+    echo "Step 4/4 - Build stream tool"
     cd $MODEL_PATH
     make stream &>/dev/nul
 fi
@@ -151,7 +172,7 @@ echo 'Setup Completed!'
 # Start Model ?
 if [ "$manualstart" -eq "0" ]; 
 then
-    $MODEL_PATH/stream -m $MODEL_PATH/models/ggml-base.en.bin --step 30000 --length 30000
+    $MODEL_PATH/stream -m $MODEL_PATH/models/$PRE_MODEL_QUANTIZE --step 30000 --length 30000
 fi
 chown -R $USER $MODEL_PATH
 exit

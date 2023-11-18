@@ -151,7 +151,7 @@ def main(args):
 
         # Run Model
         _main_path = os.path.join(APP_PATH, "main")
-        _model_path = os.path.join(APP_PATH, "models", "ggml-base.en.bin")
+        _model_path = os.path.join(APP_PATH, "models", "ggml-base.en-q5_0.bin")
         whisper_cmd = [ 
             _main_path,
             "-m", _model_path,

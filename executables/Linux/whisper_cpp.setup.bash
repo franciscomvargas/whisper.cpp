@@ -19,7 +19,7 @@ MODEL_PATH=$USER_HOME/Desota/Desota_Models/$MODEL_NAME
 PRE_MODEL_ID=base.en
 PRE_MODEL_FILE=ggml-$PRE_MODEL_ID.bin
 PRE_MODEL_QUANTIZE=ggml-$PRE_MODEL_ID-q5_0.bin
-MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh $MODEL_NAME"
+MODEL_PT_DOWNLD="$MODEL_PATH/models/download-ggml-model.sh $PRE_MODEL_ID"
 
 
 

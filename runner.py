@@ -127,11 +127,12 @@ def main(args):
     
     # TARGET File Path
     out_filepath = os.path.join(APP_PATH, f"speech-recognition{start_time}")
-    if len(get_url_from_str(send_task_url))>1:
-        dev_mode = False
-    else:
+    out_urls = get_url_from_str(send_task_url)
+    if len(out_urls)==0:
         dev_mode = True
-        report_path = send_task_url
+    else:
+        dev_mode = False
+        report_path = out_urls[0]
 
     # Get audio from request
     _req_audio = get_request_audio(model_request_dict, TMP_PATH)

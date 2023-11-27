@@ -123,16 +123,17 @@ def main(args):
     model_request_dict = get_model_req(args.model_req)
     
     # API Response URL
-    send_task_url = args.model_res_url
+    result_id = args.model_res_url
     
     # TARGET File Path
     out_filepath = os.path.join(APP_PATH, f"speech-recognition{start_time}")
-    out_urls = get_url_from_str(send_task_url)
+    out_urls = get_url_from_str(result_id)
     if len(out_urls)==0:
         dev_mode = True
+        report_path = result_id
     else:
         dev_mode = False
-        report_path = out_urls[0]
+        send_task_url = out_urls[0]
 
     # Get audio from request
     _req_audio = get_request_audio(model_request_dict, TMP_PATH)

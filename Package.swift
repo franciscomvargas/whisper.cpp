@@ -13,9 +13,13 @@ let package = Package(
     products: [
         .library(name: "whisper", targets: ["whisper"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/ggerganov/ggml.git", .revision("8bf3f009e653f6bdac893c4bb6441f88ee55fe48"))
+    ],
     targets: [
         .target(
             name: "whisper",
+            dependencies: ["ggml"],
             path: ".",
             exclude: [
                "bindings",
@@ -32,14 +36,8 @@ let package = Package(
                "Makefile"
             ],
             sources: [
-                "ggml.c",
                 "whisper.cpp",
-                "ggml-alloc.c",
-                "ggml-backend.c",
-                "ggml-quants.c",
-                "ggml-metal.m"
             ],
-            resources: [.process("ggml-metal.metal")],
             publicHeadersPath: "spm-headers",
             cSettings: [
                 .unsafeFlags(["-Wno-shorten-64-to-32", "-O3", "-DNDEBUG"]),

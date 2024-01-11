@@ -30,7 +30,6 @@ elif USER_SYS == "lin":
     USER=path_split[desota_idx-1]
     USER_PATH = "/".join(path_split[:desota_idx])
 DESOTA_ROOT_PATH = os.path.join(USER_PATH, "Desota")
-TMP_PATH = os.path.join(DESOTA_ROOT_PATH, "tmp")
 CONFIG_PATH = os.path.join(DESOTA_ROOT_PATH, "Configs")
 SERV_CONF_PATH = os.path.join(CONFIG_PATH, "services.config.yaml")
 # DeSOTA Funcs [END]
@@ -70,7 +69,7 @@ def main(args):
         send_task_url = out_urls[0]
 
     # Get audio from request
-    _req_audios = detools.get_request_audio(model_request_dict, TMP_PATH)
+    _req_audios = detools.get_request_audio(model_request_dict)
     # Audio Found!
     if _req_audios:
         for audio_cnt, req_audio in enumerate(_req_audios):
@@ -140,14 +139,13 @@ def main(args):
         for file in  out_files:
             file_basename = os.path.basename(file)
             file_extension = os.path.splitext(file)[1]
-            whisper_res += f"File Name: {file_basename}{file_extension}<br>"
 
             with open(out_filepath, "r") as fr:
                 model_res = fr.read().replace("\n", "<br>").replace("\t", "  ")
-            whisper_res += f"{model_res}<br><br>"
+            whisper_res += f"{model_res}"
         print(f"[ INFO ] -> Whisper Response:{whisper_res}")
 
-        res_filepath = os.path.join(APP_PATH, f"speech-recognition{start_time}")
+        res_filepath = os.path.join(APP_PATH, f"speech-recognition{start_time}.txt")
         with open(res_filepath, "w") as fw:
             fw.write(whisper_res)
         detools.user_chown(res_filepath)

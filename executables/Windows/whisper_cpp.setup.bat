@@ -28,7 +28,7 @@ for %%a in ("%~dp0\..\..\..\..\..\..") do set "test_path=%%~fa"
 for %%a in ("%UserProfile%\..") do set "test1_path=%%~fa"
 
 :: Model VARS
-set model_name=wcppw
+set model_name=WhisperCpp
 set model_path_basepath=Desota\Desota_Models\%model_name%
 set python_main_basepath=%model_path_basepath%\main.py
 

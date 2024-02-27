@@ -19,7 +19,7 @@ exit /B
 
 
 
-:: -- Edit bellow vvvv DeSOTA DEVELOPER EXAMPLe (Python - Tool): miniconda + pip pckgs + python cli script
+:: -- Edit bellow vvvv DeSOTA DEVELOPER EXAMPLe (C ~ Compiled (.exe) - Tool): miniconda + pip pckgs + python cli script
 
 :: USER PATH
 :: %~dp0 = C:\users\[user]\Desota\Portables\DeUrlCruncher\executables\Windows

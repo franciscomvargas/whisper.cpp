@@ -30,8 +30,9 @@ Supported platforms:
 - [x] [Android](examples/whisper.android)
 - [x] [Java](bindings/java/README.md)
 - [x] Linux / [FreeBSD](https://github.com/ggerganov/whisper.cpp/issues/56#issuecomment-1350920264)
-- [x] [WebAssembly](examples/whisper.wasm)
+- [x] Windows OUT OF THE BOX
 - [x] Windows ([MSVC](https://github.com/ggerganov/whisper.cpp/blob/master/.github/workflows/build.yml#L117-L144) and [MinGW](https://github.com/ggerganov/whisper.cpp/issues/168)]
+- [x] [WebAssembly](examples/whisper.wasm)
 - [x] [Raspberry Pi](https://github.com/ggerganov/whisper.cpp/discussions/166)
 
 The entire high-level implementation of the model is contained in [whisper.h](whisper.h) and [whisper.cpp](whisper.cpp).

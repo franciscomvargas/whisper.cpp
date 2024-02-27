@@ -19,7 +19,7 @@ exit /B
 
 
 
-:: -- Edit bellow vvvv DeSOTA DEVELOPER EXAMPLe (Python - Tool): miniconda + pip pckgs + python cli script
+:: -- Edit bellow vvvv DeSOTA DEVELOPER EXAMPLe (C ~ Compiled (.exe) - Tool): miniconda + pip pckgs + python cli script
 
 :: USER PATH
 :: %~dp0 = C:\Users\[username]Desota\Desota_Models\DeUrlCruncher\executables\windows
@@ -156,11 +156,10 @@ IF NOT EXIST %model_path% (
 
 :: Move to Project Folder
 ECHO.
-ECHO %info_h1%Step 1/2 - Move (cd) to Project Path%ansi_end%
 call cd %model_path% >NUL 2>NUL
 
 ECHO.
-ECHO %info_h1% Step 2/2 - Download Model Files%ansi_end%
+ECHO %info_h1% Download Model Files%ansi_end%
 ECHO %info_h2% This will most probably take a while... %ansi_end%
 ECHO %info_h2% Do not close! %ansi_end%
 
@@ -168,93 +167,31 @@ IF %arg2_bool% EQU 1 (
     set /p=Hit ENTER to continue *developer hint NOW MV OR COPY MODELS...
 )
 
+ECHO.
 ECHO %info_h2% Downloading Whisper CPP checkpoints %ansi_end%
 IF NOT EXIST %model_checkpoint_path% (
     mkdir %model_checkpoint_path%
 )
-powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3.bin?download=true -OutFile .\model\ggml-large-v3.bin" 
-powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin?download=true -OutFile .\model\ggml-medium.bin" 
-powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin?download=true -OutFile .\model\ggml-small.bin" 
-powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en.bin?download=true -OutFile .\model\ggml-small.en.bin" 
+
 ECHO.
-
-:: Install Conda Required
-::ECHO.
-::ECHO %info_h1%Step 2/6 - Install Miniconda for Project%ansi_end%
-::call mkdir %user_path%\Desota\Portables >NUL 2>NUL
-::IF NOT EXIST %conda_path% goto installminiconda
-::goto skipinstallminiconda
-:::installminiconda
-::IF %PROCESSOR_ARCHITECTURE%==AMD64 powershell -command "Invoke-WebRequest -Uri %miniconda64% -OutFile %user_path%\miniconda_installer.exe" && start /B /WAIT %user_path%\miniconda_installer.exe /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=%user_path%\Desota\Portables\miniconda3 && del %user_path%\miniconda_installer.exe && goto skipinstallminiconda
-::IF %PROCESSOR_ARCHITECTURE%==x86 powershell -command "Invoke-WebRequest -Uri %miniconda32% -OutFile %user_path%\miniconda_installer.exe" && start /B /WAIT %user_path%\miniconda_installer.exe /InstallationType=JustMe /AddToPath=0 /RegisterPython=0 /S /D=%user_path%\Desota\Portables\miniconda3 && del %user_path%\miniconda_installer.exe && && goto skipinstallminiconda
-::"skipinstallminiconda
-
-:: Create/Activate Conda Virtual Environment
-::ECHO %info_h2% Step 3/6 - Creating MiniConda+TORCH Environment...%ansi_end% 
-::IF %arg2_bool% EQU 1 GOTO noisy_conda
-
-:: QUIET SETUP
-
-::call %conda_path% create --prefix %model_env% python=3.10 -y >NUL 2>NUL
-::call %conda_path% activate %model_env% >NUL 2>NUL
-::ECHO %info_h2% Step 4/6 - Installing TORCH & Accessories for Environment...%ansi_end% 
-::call conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.6 -c pytorch -c nvidia
-::call conda install git
-::call conda install conda-forge::transformers
-::call %conda_path% install pip -y > NUL 2>NUL
-::GOTO eo_conda
-
-:: USER SETUP
-:::noisy_conda
-::call %conda_path% create --prefix %model_env% python=3.10 -y
-::call %conda_path% activate %model_env%
-::ECHO %info_h2% Step 4/6 - Installing TORCH & Accessories for Environment...%ansi_end% 
-::call conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cuda=11.6 -c pytorch -c nvidia
-::call conda install git
-::call conda install conda-forge::transformers
-::call conda install "ffmpeg<5" -c conda-forge
-::call %conda_path% install pip -y
-
-:::eo_conda
-
-
-:: Install required Libraries
-::ECHO.
-::ECHO %info_h1% Step 5/6 - Install Project Packages%ansi_end%
-::IF %arg2_bool% EQU 1 (
-::    call pip install -r %pip_reqs% --compile --no-cache-dir
-::) ELSE (
-::    ECHO %info_h2%The following packages will be installed:%ansi_end%
-::    call type %pip_reqs%
-::    ECHO.
-::    ECHO %info_h2%Instalation in progress...%ansi_end%
-::    call pip install -r %pip_reqs% --compile --no-cache-dir >NUL 2>NUL
-::    ECHO %info_h2%Instalation Completed:%ansi_end%
-::    call conda list
-::)
-
-:::: MINICONDA ENV DEACTIVATE
-::call %conda_path% deactivate >NUL 2>NUL
-
-:: Install Service - NSSM  - the Non-Sucking Service Manager
-::ECHO.
-::ECHO %info_h1%Step 3/3 - Create Project Service with NSSM%ansi_end%
-::ECHO %info_h2%Installing Service...%ansi_end% 
-::ECHO     Service Install Path: %model_service_install%
-::start /WAIT %model_service_install%
-
-:: Start Runner Service?
-::IF %arg1_bool% EQU 1 GOTO NOSTART
-::ECHO %info_h2%Starting Service...%ansi_end% 
-::ECHO     Service Start Path: %model_start%
-::start /WAIT %model_start%
-::call explorer "http://127.0.0.1:%service_port%"
-::ECHO %sucess%Instalation Completed!%ansi_end%
-::ECHO %info_h2%model name  : %model_name%%ansi_end%
-:: PAUSE FOR DEBUG
-::IF %arg2_bool% EQU 0 exit
-::PAUSE
-::exit
+powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3.bin?download=true -OutFile .\model\ggml-large-v3.bin" 
+IF ERRORLEVEL 0 (
+    ECHO %sucess% File `ggml-large-v3.bin` sucessfully downloaded! %ansi_end%
+)
+powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-medium.bin?download=true -OutFile .\model\ggml-medium.bin" 
+IF ERRORLEVEL 0 (
+    ECHO %sucess% File `ggml-medium.bin` sucessfully downloaded! %ansi_end%
+)
+powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin?download=true -OutFile .\model\ggml-small.bin" 
+IF ERRORLEVEL 0 (
+    ECHO %sucess% File `ggml-small.bin` sucessfully downloaded! %ansi_end%
+)
+powershell -command "Invoke-WebRequest -Uri https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.en.bin?download=true -OutFile .\model\ggml-small.en.bin" 
+IF ERRORLEVEL 0 (
+    ECHO %sucess% File `ggml-small.en.bin` sucessfully downloaded! %ansi_end%
+)
+ECHO.
+ECHO.
 
 :NOSTART
 ECHO %sucess%%model_name% Instalation Completed!%ansi_end%
